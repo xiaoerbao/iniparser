@@ -3,6 +3,5 @@
 
 import iniparse
 import configparser
-
-ini = configparser.ConfigParser()
-ini.read()
+ini = iniparse.INIParse()
+ini.read("./test.ini")
