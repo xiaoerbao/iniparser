@@ -230,8 +230,9 @@ class INIParse(dict):
     def has(self, key):
         return True if key in self else False
 
-    def write_file(self):
-        pass
+    def write_file(self, f):
+        string = self.stringify()
+        return f.write(string)
 
     def stringify(self):
         return self._section_stringify(self)
