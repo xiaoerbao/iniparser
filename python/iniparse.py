@@ -19,13 +19,13 @@ class INIParse(dict):
         self.string_symbol = ("\"", "'")
         self.true_boolean_symbol = ("true",)
         self.false_boolean_symbol = ("false",)
+        self.list_symbol = "[]"
         self.include_symbol = "@include "
         self.delimiters = ("=", ":")
         self.section_delimiters = "."
-        self._file_list = []
-        self._read_file_list = []
-        self._read_file_encoding = None
-        self._result_dict = {}
+        self.file_list = []
+        self.read_file_list = []
+        self.read_file_encoding = None
         self._cursor = {}
 
     def __getattr__(self, name):
@@ -35,7 +35,7 @@ class INIParse(dict):
             raise AttributeError(name)
 
     def read(self, filenames, encoding=None):
-        self._read_file_encoding = encoding
+        self.read_file_encoding = encoding
         if isinstance(filenames, str):
             filenames = [filenames]
         for filename in filenames:
@@ -44,15 +44,15 @@ class INIParse(dict):
                     self._read(fp, filename)
             except OSError:
                 continue
-            if filename not in self._read_file_list:
-                self._read_file_list.append(filename)
-        return self._read_file_list
+            if filename not in self.read_file_list:
+                self.read_file_list.append(filename)
+        return self.read_file_list
 
     def read_file(self, f, source=None):
         if source is None:
             try:
                 source = f.name
-                self._read_file_list.append(source)
+                self.read_file_list.append(source)
             except AttributeError:
                 source = '<???>'
         self._read(f, source)
@@ -66,16 +66,16 @@ class INIParse(dict):
         self.update(dictionary)
 
     def _read(self, fp, fpname):
-        self._file_list.append(fpname)
+        self.file_list.append(fpname)
         for line in fp:
             line = line.strip()
-            print(line)
             if len(line) < 1 or line[0] in self.comment_symbol:
                 continue
             if line.lower().startswith(self.include_symbol):
                 self._parse_include(line, fp)
                 continue
-            if all(symbol in line for symbol in self.section_symbol):
+            if all(symbol in self.section_symbol for symbol in
+                   [line[0:1], line[-1:]]) and line[0:1] != line[-1:]:
                 self._parse_section(line)
                 continue
             if any(symbol in line for symbol in self.delimiters):
@@ -141,7 +141,15 @@ class INIParse(dict):
                 except ValueError:
                     pass
         # 赋值
-        self._cursor[key] = value
+        if key.endswith(self.list_symbol):
+            key = key.strip(self.list_symbol)
+            print(key)
+            if key in self._cursor:
+                self._cursor[key].append(value)
+            else:
+                self._cursor[key] = [value]
+        else:
+            self._cursor[key] = value
 
     def _check_variable(self, variable, return_bool=True):
         return_value = {"variable": None, "section": None}
@@ -175,7 +183,7 @@ class INIParse(dict):
 
     def refresh(self):
         self.clear()
-        self.read(self._read_file_list)
+        self.read(self.read_file_list)
 
     def sections(self):
         return self.keys()
