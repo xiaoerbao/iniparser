@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import iniparse
+import iniparser
 import json
-ini = iniparse.INIParse()
+ini = iniparser.INIParser()
 ini.read("./test.ini")
 print(json.dumps(ini))
 print("=" * 40)

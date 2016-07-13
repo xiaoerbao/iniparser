@@ -11,12 +11,12 @@ version = "0.0.1"
 version_info = (0, 0, 1)
 
 
-class INIParse(dict):
+class INIParser(dict):
 
     def __init__(self):
         """
-        返回一个 INIParse 对象，后续的一些操作都是基于这个对象进行的。
-        如果要做修改。可以在实例化INIParse对象之后来修改默认的各种分隔符，这些分隔符在属性里面。
+        返回一个 INIParser 对象，后续的一些操作都是基于这个对象进行的。
+        如果要做修改。可以在实例化INIParser对象之后来修改默认的各种分隔符，这些分隔符在属性里面。
         """
         self.comment_symbol = [";"] # 注释识别符，可以支持多个
         self.section_symbol = ("[", "]") # 分组识别标识，第一项是开头，第二项是结尾
@@ -131,7 +131,7 @@ class INIParse(dict):
             group = line[0:index]
             line = line[index + 1:]
             if group not in self._cursor:
-                self._cursor[group] = INIParse()
+                self._cursor[group] = INIParser()
             self._cursor = self._cursor[group]
 
     def _parse_expression(self, line):
@@ -326,9 +326,9 @@ class INIParse(dict):
         """
         string = ""
         for (key, val) in section.items():
-            if isinstance(val, INIParse):
+            if isinstance(val, INIParser):
                 key = (prefix + "." + key).strip(".")
-                if not all(isinstance(tval, INIParse) for (tkey, tval)
+                if not all(isinstance(tval, INIParser) for (tkey, tval)
                            in val.items()):
                     string += "[" + key + "]\n"
                 string += self._section_stringify(val, key)
