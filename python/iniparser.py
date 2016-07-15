@@ -7,8 +7,8 @@ import os
 INI 格式文件解析器
 """
 
-version = "0.0.1"
-version_info = (0, 0, 1)
+version = "1.0.1"
+version_info = (1, 0, 1)
 
 
 class INIParser(dict):

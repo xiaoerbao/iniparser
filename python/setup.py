@@ -3,7 +3,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 setup(
     name="INIParser",
     version=VERSION,
@@ -15,4 +15,5 @@ setup(
     url='https://github.com/laomafeima/iniparse',
     license='http://www.apache.org/licenses/LICENSE-2.0',
     packages=find_packages(),
+    py_modules=["iniparser"],
     )

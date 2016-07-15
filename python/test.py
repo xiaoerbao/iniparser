@@ -6,4 +6,3 @@ import json
 ini = iniparser.INIParser()
 ini.read("./test.ini")
 print(json.dumps(ini))
-print("=" * 40)
