@@ -1,0 +1,16 @@
+{
+  "name": "parseini",
+  "version": "1.0.0",
+  "description": "the .ini config file plus parse module",
+  "main": "parseini.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ini",
+    "config",
+    "parseini"
+  ],
+  "author": "Erbao Xiao",
+  "license": "ISC"
+}
